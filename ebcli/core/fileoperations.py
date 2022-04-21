@@ -433,6 +433,9 @@ def _zipdir(path, zipf, ignore_list=None):
         if '.elasticbeanstalk' in root:
             io.log_info('  -skipping: {}'.format(root))
             continue
+        # Symlinks are not zipped (provisional solution). The final correct solution would be to not zip symlinks
+        # that are actually ignored by .ebignore. See: https://github.com/aws/aws-elastic-beanstalk-cli/issues/69
+        """
         for d in dirs:
             cur_dir = os.path.join(root, d)
             if os.path.islink(cur_dir):
@@ -448,6 +451,7 @@ def _zipdir(path, zipf, ignore_list=None):
                 else:
                     zipInfo.external_attr = long(2716663808)
                 zipf.writestr(zipInfo, os.readlink(cur_dir))
+        """
         for f in files:
             cur_file = os.path.join(root, f)
 
